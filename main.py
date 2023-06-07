@@ -1,4 +1,3 @@
-import contextlib
 import time
 import keyboard
 import win32clipboard
