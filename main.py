@@ -15,6 +15,12 @@ class ClipboardWatcher:
         finally:
             win32clipboard.CloseClipboard()
         return data
+    
+    def copy_to_clipboard(self, data):
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardText(data)
+        win32clipboard.CloseClipboard()
 
     def modify_data(self, data: str) -> str:
         sentences = data.split('. ')
@@ -30,7 +36,8 @@ class ClipboardWatcher:
         time.sleep(0.01)
 
         if data := self.get_clipboard_data():
-            keyboard.write(self.modify_data(data))
+            self.copy_to_clipboard(self.modify_data(data))
+            keyboard.press_and_release('ctrl+v')
 
     def handle_hotkey(self):
         self.get_data()
