@@ -5,11 +5,11 @@ import win32clipboard
 import wx
 import ctypes
 
+
 class ClipboardWatcher:
     def __init__(self):
         self.setup_hotkey()
-        
-        # test
+
         self.CF_TEXT = 1
 
         self.kernel32 = ctypes.windll.kernel32
@@ -101,9 +101,11 @@ class ChangeText(wx.Frame):
         label_position_sizer = wx.BoxSizer(wx.HORIZONTAL)
         label_sizer.Add(label_position_sizer, 0, wx.EXPAND, 0)
 
-        label = wx.StaticText(self.panel, wx.ID_ANY, "Pour modifier le texte, il faut selectionner le texte et appuyer sur la touche F8", style=wx.ALIGN_CENTER_HORIZONTAL)
+        label = wx.StaticText(
+            self.panel, wx.ID_ANY, "Pour modifier le texte, il faut selectionner le texte et appuyer sur la touche F8", style=wx.ALIGN_CENTER_HORIZONTAL)
         label.SetMinSize((361, 100))
-        label.SetFont(wx.Font(16, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, 0, "Segoe UI"))
+        label.SetFont(wx.Font(16, wx.FONTFAMILY_SWISS,
+                      wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, 0, "Segoe UI"))
         label_position_sizer.Add(label, 1, wx.ALL, 0)
 
         self.panel.SetSizer(label_sizer)
@@ -121,6 +123,7 @@ class ChangeText(wx.Frame):
         self.clipboard_thread.stop()
 
         event.Skip()
+
 
 class MyApp(wx.App):
     def OnInit(self):
