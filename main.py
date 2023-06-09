@@ -3,22 +3,34 @@ import threading
 import keyboard
 import win32clipboard
 import wx
+import ctypes
 
 class ClipboardWatcher:
     def __init__(self):
         self.setup_hotkey()
+        
+        # test
+        self.CF_TEXT = 1
 
-    def get_clipboard_data(self) -> str:
-        # on ouvre le clipboard
-        win32clipboard.OpenClipboard()
-        data = None
-        # on si on a rien selectionner ça evite les erreurs
+        self.kernel32 = ctypes.windll.kernel32
+        self.kernel32.GlobalLock.argtypes = [ctypes.c_void_p]
+        self.kernel32.GlobalLock.restype = ctypes.c_void_p
+        self.kernel32.GlobalUnlock.argtypes = [ctypes.c_void_p]
+        self.user32 = ctypes.windll.user32
+        self.user32.GetClipboardData.restype = ctypes.c_void_p
+
+    def get_clipboard_data(self):
+        self.user32.OpenClipboard(0)
         try:
-            if win32clipboard.IsClipboardFormatAvailable(win32clipboard.CF_TEXT):
-                data = win32clipboard.GetClipboardData()
+            if self.user32.IsClipboardFormatAvailable(self.CF_TEXT):
+                data = self.user32.GetClipboardData(self.CF_TEXT)
+                data_locked = self.kernel32.GlobalLock(data)
+                text = ctypes.c_char_p(data_locked)
+                value = text.value
+                self.kernel32.GlobalUnlock(data_locked)
+                return value.decode('latin1')
         finally:
-            win32clipboard.CloseClipboard()
-        return data
+            self.user32.CloseClipboard()
 
     def copy_to_clipboard(self, data) -> None:
         # on copie les données transformées dans le presse papier
