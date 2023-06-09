@@ -15,7 +15,7 @@ class ClipboardWatcher:
         # on si on a rien selectionner ça evite les erreurs
         try:
             if win32clipboard.IsClipboardFormatAvailable(win32clipboard.CF_TEXT):
-                data = win32clipboard.GetClipboardData(win32clipboard.CF_TEXT).decode("utf-8")
+                data = win32clipboard.GetClipboardData()
         finally:
             win32clipboard.CloseClipboard()
         return data
