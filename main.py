@@ -89,6 +89,7 @@ class ChangeText(wx.Frame):
         self.SetSize((325, 135))
         self.SetMinSize((325, 135))
         self.SetTitle("Changer le texte")
+        self.SetIcon(wx.Icon('maj.ico'))
 
         # Ici on relie la fermeture de l'application a une methode pour fermer le thread
         self.Bind(wx.EVT_CLOSE, self.OnClose)
